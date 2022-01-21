@@ -30,25 +30,24 @@ if (fs.existsSync(outFile)) {
     process.exit(1)
 }
 
-let chunks = []
-let offset = 0
-args.forEach(function(file) {
+let numSamples = 0
+const chunks = args.map(function(file) {
     let wav = new wavefile.WaveFile(fs.readFileSync(file))
     wav.toBitDepth(bitDepth)
     wav.toSampleRate(sampleRate)
     let samples = wav.getSamples(false)
     let chunk = wav.fmt.numChannels == 2 ? [samples[0], samples[1]] : [samples, samples]
-    chunks.push(chunk)
-    offset += chunk[0].length
+    numSamples += chunk[0].length
+    return chunk
 })
 
-let samples = [new Float64Array(offset), new Float64Array(offset)]
-offset = 0
-chunks.forEach(function(chunk) {
+let offset = 0
+const samples = chunks.reduce(function(samples, chunk) {
     samples[0].set(chunk[0], offset)
     samples[1].set(chunk[1], offset)
     offset += chunk[0].length
-})
+    return samples
+}, [new Float64Array(numSamples), new Float64Array(numSamples)])
 
 let wav = new wavefile.WaveFile()
 wav.fromScratch(2, sampleRate, bitDepth, [samples[0], samples[1]])
