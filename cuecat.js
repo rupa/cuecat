@@ -5,8 +5,11 @@
 const bitDepth = '16'
 const sampleRate = 44100.0
 
-var fs = require('fs')
-var wavefile = require('wavefile')
+const fs = require('fs')
+const wavefile = require('wavefile')
+
+let numSamples = 0
+let offset = 0
 
 const args = process.argv.slice(2)
 if (args.length == 1) {
@@ -30,8 +33,7 @@ if (fs.existsSync(outFile)) {
     process.exit(1)
 }
 
-let numSamples = 0
-const chunks = args.map(function(file) {
+const chunks = args.map(file => {
     let wav = new wavefile.WaveFile(fs.readFileSync(file))
     wav.toBitDepth(bitDepth)
     wav.toSampleRate(sampleRate)
@@ -41,8 +43,7 @@ const chunks = args.map(function(file) {
     return chunk
 })
 
-let offset = 0
-const samples = chunks.reduce(function(samples, chunk) {
+const samples = chunks.reduce((samples, chunk) => {
     samples[0].set(chunk[0], offset)
     samples[1].set(chunk[1], offset)
     offset += chunk[0].length
@@ -54,7 +55,7 @@ wav.fromScratch(2, sampleRate, bitDepth, [samples[0], samples[1]])
 
 // set cue points (not regions)
 offset = 0
-chunks.forEach(function(chunk) {
+chunks.forEach(chunk => {
     if (offset > 0) {
         wav.setCuePoint({position: offset / sampleRate * 1000}) // milliseconds
     }
