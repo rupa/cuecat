@@ -8,3 +8,5 @@ a cue point at the end of each one
 expects mono or stereo WAV input, output is 16 bit 44.1khz stereo WAV
 
 You can also list the cue points in a wav: `cuecat.js file.wav`
+
+`batch.sh` is an example for how I'd run this on a bunch of dirs full of wav files
