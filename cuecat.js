@@ -56,7 +56,7 @@ if (require.main === module) {
 
     const outFile = args.pop()
 
-    console.log(args, '=>', outFile)
+    console.log(args, `=> ${outFile} (${args.length} slices)`)
 
     if (fs.existsSync(outFile)) {
         console.log('output file already exists')
