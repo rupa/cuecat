@@ -9,6 +9,11 @@ const cuecat = (files, bitDepth='16', sampleRate=44100.0) => {
     let numSamples = 0
     let offset = 0
 
+    const maxChannels = files.reduce((max, file) => {
+      const wav = new wavefile.WaveFile(fs.readFileSync(file))
+      return Math.max(max, wav.fmt.numChannels)
+    }, 1)
+
     const chunks = files.map(file => {
         const wav = new wavefile.WaveFile(fs.readFileSync(file))
         wav.toBitDepth(bitDepth)
@@ -21,13 +26,16 @@ const cuecat = (files, bitDepth='16', sampleRate=44100.0) => {
 
     const samples = chunks.reduce((samples, chunk) => {
         samples[0].set(chunk[0], offset)
-        samples[1].set(chunk[1], offset)
+        if(maxChannels > 1 ){
+          samples[1].set(chunk[1], offset)
+        }
         offset += chunk[0].length
         return samples
     }, [new Float64Array(numSamples), new Float64Array(numSamples)])
 
     const wav = new wavefile.WaveFile()
-    wav.fromScratch(2, sampleRate, bitDepth, [samples[0], samples[1]])
+    const wav_samples = maxChannels == 1 ? [samples[0]] : [samples[0],samples[1]]
+    wav.fromScratch(maxChannels, sampleRate, bitDepth, wav_samples)
 
     // set cue points (not regions)
     offset = 0
