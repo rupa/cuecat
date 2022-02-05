@@ -5,7 +5,7 @@ targeted for use with the dirtywave M8. note that M8 only supports up to 32 slic
 `cuecat.js input1.wav input2.wav ... inputN.wav output.wav` to stitch the input wavs together (in order), and set
 a cue point at the end of each one
 
-expects mono or stereo WAV input, output is 16 bit 44.1khz stereo WAV
+expects mono or stereo WAV input, output is 16 bit 44.1khz stereo WAV, or mono if all inputs are mono.
 
 You can also list the cue points in a wav: `cuecat.js file.wav`
 
