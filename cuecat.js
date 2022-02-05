@@ -40,9 +40,7 @@ const cuecat = (files, bitDepth='16', sampleRate=44100.0) => {
     // set cue points (not regions)
     offset = 0
     chunks.forEach(chunk => {
-        if (offset > 0) {
-            wav.setCuePoint({position: offset / sampleRate * 1000}) // milliseconds
-        }
+        wav.setCuePoint({position: offset / sampleRate * 1000}) // milliseconds
         offset += chunk[0].length
     })
     return wav
