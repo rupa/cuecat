@@ -1,6 +1,6 @@
 concatenate wav files and put a cue point at each boundary.
 
-targeted for use with the dirtywave M8
+targeted for use with the dirtywave M8. note that M8 only supports up to 32 slice markers in a file.
 
 `cuecat.js input1.wav input2.wav ... inputN.wav output.wav` to stitch the input wavs together (in order), and set
 a cue point at the end of each one
