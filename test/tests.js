@@ -10,9 +10,10 @@ const {cuecat, getInfoAndChunks} = require("../cuecat");
 const testDir = "./test/CR78"
 const stereoFile = "./test/stereo.wav"
 const cueHash = "9228fc19a3cec3518a177d31bc0d8c74"
+
 let files
 
-describe("when testDir exists", () => {
+describe("when testDir exists", function() {
     before(function() {
         if (fs.existsSync(testDir)) {
             files = fs.readdirSync(testDir)
@@ -22,8 +23,9 @@ describe("when testDir exists", () => {
             this.skip()
         }
     })
-    describe("cuecat", () => {
-        it("should not change output unexpectedly", () => {
+
+    describe("cuecat", function() {
+        it("should not change output unexpectedly", function() {
             const wav = cuecat(files)
             const hash = crypto.createHash('md5')
                 .update(wav.toBuffer()).digest("hex")
@@ -35,8 +37,8 @@ describe("when testDir exists", () => {
         })
     });
 
-    describe("getInfoAndChunks", () => {
-        it("should calculate max and get chunks", () => {
+    describe("getInfoAndChunks", function() {
+        it("should calculate max and get chunks", function() {
             const {
                 maxChannels,
                 maxSamples,
@@ -48,7 +50,7 @@ describe("when testDir exists", () => {
             expect(sumSamples).to.equal(219311)
             expect(chunks).to.have.length(16)
         })
-        it("should be stereo if any file is stereo", () => {
+        it("should be stereo if any file is stereo", function() {
             const {
                 maxChannels,
                 maxSamples,
