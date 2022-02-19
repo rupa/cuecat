@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+'use strict'
 
 const fs = require('fs')
 const wavefile = require('wavefile')
@@ -48,7 +49,7 @@ const cuecat = (files, bitDepth='16', sampleRate=44100.0) => {
         chunks,
     } = getInfoAndChunks(files, bitDepth, sampleRate)
 
-    wav = buildWav(maxChannels, bitDepth, sampleRate, chunks, sumSamples)
+    const wav = buildWav(maxChannels, bitDepth, sampleRate, chunks, sumSamples)
 
     // set cue points (not regions)
     chunks.reduce((offset, chunk) => {
