@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "cuecat.js",
+  "type": "module",
   "scripts": {
     "test": "mocha --reporter list"
   },
