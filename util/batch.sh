@@ -11,7 +11,7 @@
 # and you should have dir_1.wav dir_2.wav, etc
 
 for x in $*; do
-  printf "cuecat.js "
+  printf "cuecat.mjs "
   for y in $x/*wav; do printf "\"$y\" "; done
   echo \"${x//\//_}.wav\"
 done

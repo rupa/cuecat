@@ -3,7 +3,7 @@ import {existsSync, readdirSync} from 'fs'
 import {extname} from 'path'
 import {expect} from 'chai'
 
-import {cuecat, equecat, getInfoAndChunks} from "../cuecat.js"
+import {cuecat, equcat, getInfoAndChunks} from "../cuecat.mjs"
 
 const testDir = "./test/CR78"
 const stereoFile = "./test/stereo.wav"

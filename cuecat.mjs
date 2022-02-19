@@ -84,8 +84,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         process.exit(0)
     }
     if (args.length < 3) {
-        console.log('cuecat.js [-e] <at least two input files...> <output file>')
-        console.log('cuecat.js <input file> (list cue points)')
+        console.log('cuecat.mjs [-e] <at least two input files...> <output file>')
+        console.log('cuecat.mjs <input file> (list cue points)')
         process.exit(1)
     }
     const outFile = args.pop()
