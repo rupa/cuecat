@@ -13,33 +13,42 @@ const getInfoAndChunks = (files, bitDepth, sampleRate) => {
         return {
             maxChannels: Math.max(acc.maxChannels, wav.fmt.numChannels),
             maxSamples: Math.max(acc.maxSamples, chunk[0].length),
-            totalSamples: acc.totalSamples += chunk[0].length,
+            sumSamples: acc.sumSamples += chunk[0].length,
             chunks: [...acc.chunks, chunk],
         }
-    }, {maxChannels: 0, maxSamples: 0, totalSamples: 0, chunks:[]})
+    }, {maxChannels: 0, maxSamples: 0, sumSamples: 0, chunks:[]})
 }
 
-const cuecat = (files, bitDepth='16', sampleRate=44100.0) => {
-    // concatenate wav files and put a cue point at each boundary
+const buildWav = (numChannels, bitDepth, sampleRate, chunks, sampleSize) => {
     let offset = 0
-    const {
-        maxChannels,
-        maxSamples,
-        totalSamples,
-        chunks,
-    } = getInfoAndChunks(files, bitDepth, sampleRate)
-
     const samples = chunks.reduce((samples, chunk) => {
         samples[0].set(chunk[0], offset)
-        if(maxChannels > 1 ){
+        if(numChannels > 1 ){
           samples[1].set(chunk[1], offset)
         }
         offset += chunk[0].length
         return samples
-    }, [new Float64Array(totalSamples), new Float64Array(totalSamples)])
-    const wav_samples = maxChannels == 1 ? [samples[0]] : [samples[0], samples[1]]
+    }, [new Float64Array(sampleSize), new Float64Array(sampleSize)])
     const wav = new wavefile.WaveFile()
-    wav.fromScratch(maxChannels, sampleRate, bitDepth, wav_samples)
+    wav.fromScratch(
+        numChannels,
+        sampleRate,
+        bitDepth,
+        numChannels == 1 ? [samples[0]] : [samples[0], samples[1]]
+    )
+    return wav
+}
+
+const cuecat = (files, bitDepth='16', sampleRate=44100.0) => {
+    // concatenate wav files and put a cue point at each boundary
+    const {
+        maxChannels,
+        maxSamples,
+        sumSamples,
+        chunks,
+    } = getInfoAndChunks(files, bitDepth, sampleRate)
+
+    wav = buildWav(maxChannels, bitDepth, sampleRate, chunks, sumSamples)
 
     // set cue points (not regions)
     chunks.reduce((offset, chunk) => {

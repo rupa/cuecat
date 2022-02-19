@@ -24,12 +24,12 @@ describe("getInfoAndChunks", () => {
         const {
             maxChannels,
             maxSamples,
-            totalSamples,
+            sumSamples,
             chunks,
         } = getInfoAndChunks(files, '16', 44100.0)
         expect(maxChannels).to.equal(1)
         expect(maxSamples).to.equal(27082)
-        expect(totalSamples).to.equal(219311)
+        expect(sumSamples).to.equal(219311)
         expect(chunks).to.have.length(16)
     })
 })
