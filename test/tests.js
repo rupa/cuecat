@@ -10,14 +10,15 @@ const {cuecat, getInfoAndChunks} = require("../cuecat");
 const testDir = "./test/CR78"
 const stereoFile = "./test/stereo.wav"
 const cueHash = "9228fc19a3cec3518a177d31bc0d8c74"
-
-const files = fs.readdirSync(testDir)
-    .filter(f => path.extname(f).toLowerCase() === ".wav")
-    .map(f => `${testDir}/${f}`)
+let files
 
 describe("when testDir exists", () => {
     before(function() {
-        if (!fs.existsSync(testDir)) {
+        if (fs.existsSync(testDir)) {
+            files = fs.readdirSync(testDir)
+                .filter(f => path.extname(f).toLowerCase() === ".wav")
+                .map(f => `${testDir}/${f}`)
+        } else {
             this.skip()
         }
     })
