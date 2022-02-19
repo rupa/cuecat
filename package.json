@@ -4,7 +4,7 @@
   "description": "",
   "main": "cuecat.js",
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter list"
   },
   "author": "rupa",
   "license": "public domain",
