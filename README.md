@@ -11,4 +11,8 @@ if the first argument is `-e`, the input files will be evenly spaced through the
 
 You can also list the cue points in a WAV: `cuecat.js file.wav`
 
-`batch.sh` is an example for how I'd run this on a bunch of dirs full of WAV files
+The utils folder has some things:
+
+* `batch.sh` is an example for how I'd run this on a bunch of dirs full of WAV files
+
+* `note_order.py` tries to sort and list musical filenames in chromatic order

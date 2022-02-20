@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+"""
+given a list of filenames with numsical information such as C2 or Bb4 in the
+name, attempt to order that list chromatically
+"""
+import re
+
+notes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
+note_ord = {x: i for i, x in enumerate(notes)}
+for enharm in (
+    ('C#', 'Db'),
+    ('D#', 'Eb'),
+    ('F#', 'Gb'),
+    ('G#', 'Ab'),
+    ('A#', 'Bb'),
+):
+    note_ord[enharm[0]] = note_ord[enharm[1]]
+
+matcher = re.compile(r'([A-G]#?b?)([0-9])')
+
+
+def to_mapped(names):
+    for name in names:
+        octave, note = matcher.search(name).group(2, 1)
+        yield (octave, note_ord[note]), name
+
+
+def to_ordered(names):
+    mapped = {k: v for k, v in to_mapped(names)}
+    return [v for _, v in sorted(mapped.items())]
+
+
+if __name__ == '__main__':
+    import os
+    import sys
+
+    args = sys.argv[1:]
+    if not args:
+        sys.exit()
+
+    if args[0] == '-l':
+        args = args[1:]
+        l = True
+    else:
+        l = False
+
+    res = to_ordered(os.listdir(' '.join(args)))
+
+    if l:
+        for x in res:
+            print(x)
+    else:
+        print(' '.join(res))
