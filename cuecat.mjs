@@ -59,7 +59,7 @@ export const cuecat = (files, bitDepth='16', sampleRate=44100.0) => {
     return wav
 }
 
-const equcat = (files, bitDepth='16', sampleRate=44100.0) => {
+export const equcat = (files, bitDepth='16', sampleRate=44100.0) => {
     // concatenate wav files into even length chunks
     const {
         maxChannels,
