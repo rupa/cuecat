@@ -5,11 +5,12 @@ const fs = require("fs");
 const path = require("path");
 const {expect} = require("chai");
 
-const {cuecat, getInfoAndChunks} = require("../cuecat");
+const {cuecat, equcat, getInfoAndChunks} = require("../cuecat");
 
 const testDir = "./test/CR78"
 const stereoFile = "./test/stereo.wav"
 const cueHash = "9228fc19a3cec3518a177d31bc0d8c74"
+const eqeHash = "5219058d4a0d1dc4e9cf8f51acde5035"
 
 let files
 
@@ -34,6 +35,19 @@ describe("when testDir exists", function() {
             expect(wav.fmt.numChannels).to.equal(1)
             expect(wav.fmt.sampleRate).to.equal(44100)
             expect(wav.cue.dwCuePoints).to.equal(16)
+        })
+    });
+
+    describe("equcat", function() {
+        it("should not change output unexpectedly", function() {
+            const wav = equcat([...files, stereoFile])
+            const hash = crypto.createHash('md5')
+                .update(wav.toBuffer()).digest("hex")
+            expect(hash).to.equal(eqeHash)
+            expect(wav.bitDepth).to.equal('16')
+            expect(wav.fmt.numChannels).to.equal(2)
+            expect(wav.fmt.sampleRate).to.equal(44100)
+            expect(wav.cue.dwCuePoints).to.equal(0)
         })
     });
 
