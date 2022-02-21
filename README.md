@@ -14,5 +14,5 @@ You can also list the cue points in a WAV: `cuecat.js file.wav`
 The utils folder has some things:
 
 * `batch.sh` is an example for how I'd run this on a bunch of dirs full of WAV files.
-
 * `note_order.py` tries to sort and list musical filenames in chromatic order.
+* `process.sh` has some functions for trimming audio files.
