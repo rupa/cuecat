@@ -3,7 +3,10 @@
 given a list of filenames with numsical information such as C2 or Bb4 in the
 name, attempt to order that list chromatically
 """
+import logging
 import re
+
+log = logging.getLogger(__name__)
 
 notes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
 note_ord = {x: i for i, x in enumerate(notes)}
@@ -16,13 +19,17 @@ for enharm in (
 ):
     note_ord[enharm[0]] = note_ord[enharm[1]]
 
-matcher = re.compile(r'([A-G]#?b?)([0-9])')
+matcher = re.compile(r'([A-G]#?b?)(-?[0-9])')
 
 
 def to_mapped(names):
     for name in names:
-        octave, note = matcher.search(name).group(2, 1)
-        yield (octave, note_ord[note]), name
+        try:
+            octave, note = matcher.search(name).group(2, 1)
+        except AttributeError:
+            log.warning("no match: {}".format(name))
+            continue
+        yield (int(octave), note_ord[note]), name
 
 
 def to_ordered(names):
