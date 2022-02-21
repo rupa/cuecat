@@ -1,11 +1,9 @@
-'use strict'
+import {createHash} from 'crypto'
+import {existsSync, readdirSync} from 'fs'
+import {extname} from 'path'
+import {expect} from 'chai'
 
-const crypto = require('crypto')
-const fs = require("fs");
-const path = require("path");
-const {expect} = require("chai");
-
-const {cuecat, equcat, getInfoAndChunks} = require("../cuecat");
+import {cuecat, equcat, getInfoAndChunks} from "../cuecat.mjs"
 
 const testDir = "./test/CR78"
 const stereoFile = "./test/stereo.wav"
@@ -16,9 +14,9 @@ let files
 
 describe("when testDir exists", function() {
     before(function() {
-        if (fs.existsSync(testDir)) {
-            files = fs.readdirSync(testDir)
-                .filter(f => path.extname(f).toLowerCase() === ".wav")
+        if (existsSync(testDir)) {
+            files = readdirSync(testDir)
+                .filter(f => extname(f).toLowerCase() === ".wav")
                 .map(f => `${testDir}/${f}`)
         } else {
             this.skip()
@@ -28,7 +26,7 @@ describe("when testDir exists", function() {
     describe("cuecat", function() {
         it("should not change output unexpectedly", function() {
             const wav = cuecat(files)
-            const hash = crypto.createHash('md5')
+            const hash = createHash('md5')
                 .update(wav.toBuffer()).digest("hex")
             expect(hash).to.equal(cueHash)
             expect(wav.bitDepth).to.equal('16')
@@ -41,7 +39,7 @@ describe("when testDir exists", function() {
     describe("equcat", function() {
         it("should not change output unexpectedly", function() {
             const wav = equcat([...files, stereoFile])
-            const hash = crypto.createHash('md5')
+            const hash = createHash('md5')
                 .update(wav.toBuffer()).digest("hex")
             expect(hash).to.equal(eqeHash)
             expect(wav.bitDepth).to.equal('16')

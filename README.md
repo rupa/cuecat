@@ -4,12 +4,12 @@ Takes mono or stereo WAV input. Output is 16 bit 44.1khz WAV, stereo, or mono if
 
 Targeted for use with the dirtywave M8, which supports up to 32 cue markers in a WAV, or can evenly slice a WAV in up to 128 slices.
 
-`cuecat.js input1.wav input2.wav ... inputN.wav output.wav` to stitch the input WAVs together (in order), and set
+`cuecat.mjs input1.wav input2.wav ... inputN.wav output.wav` to stitch the input WAVs together (in order), and set
 a cue point at the end of each one.
 
 If the first argument is `-e`, the input files will be evenly spaced through the output, and cue points will not be set.
 
-You can also list the cue points in a WAV: `cuecat.js file.wav`
+You can also list the cue points in a WAV: `cuecat.mjs file.wav`
 
 The utils folder has some things:
 

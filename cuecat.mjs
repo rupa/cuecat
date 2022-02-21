@@ -1,12 +1,11 @@
 #!/usr/bin/env node
-'use strict'
 
-const fs = require('fs')
-const wavefile = require('wavefile')
+import {existsSync, readFileSync, writeFileSync} from 'fs';
+import wavefile from "wavefile"
 
-const getInfoAndChunks = (files, bitDepth, sampleRate) => {
+export const getInfoAndChunks = (files, bitDepth, sampleRate) => {
     return files.reduce((acc, file) => {
-        const wav = new wavefile.WaveFile(fs.readFileSync(file))
+        const wav = new wavefile.WaveFile(readFileSync(file))
         wav.toBitDepth(bitDepth)
         wav.toSampleRate(sampleRate)
         const samples = wav.getSamples(false)
@@ -40,7 +39,7 @@ const buildWav = (numChannels, bitDepth, sampleRate, chunks, sampleSize, equalSi
     return wav
 }
 
-const cuecat = (files, bitDepth='16', sampleRate=44100.0) => {
+export const cuecat = (files, bitDepth='16', sampleRate=44100.0) => {
     // concatenate wav files and put a cue point at each boundary
     const {
         maxChannels,
@@ -60,7 +59,7 @@ const cuecat = (files, bitDepth='16', sampleRate=44100.0) => {
     return wav
 }
 
-const equcat = (files, bitDepth='16', sampleRate=44100.0) => {
+export const equcat = (files, bitDepth='16', sampleRate=44100.0) => {
     // concatenate wav files into even length chunks
     const {
         maxChannels,
@@ -71,7 +70,7 @@ const equcat = (files, bitDepth='16', sampleRate=44100.0) => {
     return buildWav(maxChannels, bitDepth, sampleRate, chunks, maxSamples * files.length, true)
 }
 
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
     let equalSize = false
 
     const args = process.argv.slice(2)
@@ -80,31 +79,23 @@ if (require.main === module) {
         equalSize = true
     }
     if (args.length == 1) {
-        const wav = new wavefile.WaveFile(fs.readFileSync(args[0]))
+        const wav = new wavefile.WaveFile(readFileSync(args[0]))
         console.log(wav.listCuePoints())
         process.exit(0)
     }
     if (args.length < 3) {
-        console.log('cuecat.js [-e] <at least two input files...> <output file>')
-        console.log('cuecat.js <input file> (list cue points)')
+        console.log('cuecat.mjs [-e] <at least two input files...> <output file>')
+        console.log('cuecat.mjs <input file> (list cue points)')
         process.exit(1)
     }
     const outFile = args.pop()
 
     console.log(args, `=> ${outFile} (${args.length}${equalSize ? " equal" : ""} slices)`)
-    if (fs.existsSync(outFile)) {
+    if (existsSync(outFile)) {
         console.log('output file already exists')
         process.exit(1)
     }
 
-    fs.writeFileSync(outFile, (equalSize ? equcat : cuecat)(args).toBuffer())
+    writeFileSync(outFile, (equalSize ? equcat : cuecat)(args).toBuffer())
 
 }
-
-module.exports = cuecat
-
-module.exports = {
-    cuecat,
-    equcat,
-    getInfoAndChunks
-};
