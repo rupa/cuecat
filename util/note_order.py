@@ -16,10 +16,22 @@ for enharm in (
     ('F#', 'Gb'),
     ('G#', 'Ab'),
     ('A#', 'Bb'),
+    ('c', 'C'),
+    ('d', 'D'),
+    ('e', 'E'),
+    ('f', 'F'),
+    ('g', 'G'),
+    ('a', 'A'),
+    ('b', 'B'),
+    ('f#', 'Gb'),
+    ('c#', 'Db'),
+    ('d#', 'Eb'),
+    ('g#', 'Ab'),
+    ('a#', 'Bb'),
 ):
     note_ord[enharm[0]] = note_ord[enharm[1]]
 
-matcher = re.compile(r'([A-G]#?b?)(-?[0-9])')
+matcher = re.compile(r'([A-Ga-g]#?b?)(-?[0-9])')
 
 
 def to_mapped(names):
