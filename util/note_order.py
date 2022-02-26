@@ -44,8 +44,10 @@ def to_mapped(names):
         yield (int(octave), note_ord[note]), name
 
 
-def to_ordered(names):
+def to_ordered(names, debug=False):
     mapped = {k: v for k, v in to_mapped(names)}
+    if debug:
+        return [(k, v) for k, v in sorted(mapped.items())]
     return [v for _, v in sorted(mapped.items())]
 
 
@@ -57,13 +59,19 @@ if __name__ == '__main__':
     if not args:
         sys.exit()
 
+    l = False
+    if args[0] == '-d':
+        args = args[1:]
+        debug = True
+        l = True
+    else:
+        debug = False
+
     if args[0] == '-l':
         args = args[1:]
         l = True
-    else:
-        l = False
 
-    res = to_ordered(os.listdir(' '.join(args)))
+    res = to_ordered(os.listdir(' '.join(args)), debug)
 
     if l:
         for x in res:
