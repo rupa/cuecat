@@ -37,6 +37,7 @@ const buildWav = (numChannels, bitDepth, sampleRate, chunks, sampleSize, equalSi
         bitDepth,
         numChannels == 1 ? [samples[0]] : [samples[0], samples[1]]
     )
+    console.log(`output: channels: ${numChannels} bitDepth: ${bitDepth} sampleRate: ${sampleRate}`)
     return wav
 }
 
