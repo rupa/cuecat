@@ -10,8 +10,13 @@
 #   bash run.sh
 # and you should have dir_1.wav dir_2.wav, etc
 
+SAVEIFS=$IFS
+IFS=$(echo -en "\n\b")
+
 for x in $*; do
   printf "cuecat.js "
   for y in $x/*wav; do printf "\"$y\" "; done
   echo \"${x//\//_}.wav\"
 done
+
+IFS=$SAVEIFS
